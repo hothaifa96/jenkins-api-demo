@@ -59,7 +59,7 @@ pipeline{
                 stage("integration test"){
                     steps{   
                         // docker compose up                
-                        sh 'curl "http://127.0.0.1:5005/api/convert?from=USD&to=ILS&amount=100"'
+                        sh 'curl "http://${env.TEST_CONTIANER_NAME}:5005/api/convert?from=USD&to=ILS&amount=100"'
                     }
                 }
             }
