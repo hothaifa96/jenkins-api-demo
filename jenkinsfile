@@ -6,6 +6,14 @@ pipeline{
         GIT_REPO = "https://github.com/hothaifa96/jenkins-api-demo"
         WORK_SPACE = "jenkins-api-demo"
         TEST_CONTIANER_NAME = "app"
+
+        AWS_ACCOUNT_ID = "514080426196"
+        AWS_REGOIN = "us-east-1"
+        ECR_REPO = "forex-app"
+        ECR_URL = "${env.AWS_ACCOUNT_ID}.dkr.ecr.${env.AWS_REGION}.amazonaws.com"
+
+        AWS_CRED_ID = "ecr-cred"
+
     }
     stages{
         stage("checkout"){
@@ -69,6 +77,15 @@ pipeline{
             }
            
         }
+        }
+        stage ("push image to ECR"){
+            steps{
+                withCredentials([[ $class: 'AmazonWebServicesCredentialsBinding', credentialsId: "${env.AWS_CRED_ID}"]]){
+                    sh "aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin  ${env.ECR_URL}"
+                    sh "docker tag ${DOCKER_IMAGE}:${DOCKER_TAG} ${env.ECR_URL}/${env.ECR_REPO}:latest"
+                    sh "docker push ${env.ECR_URL}/${env.ECR_REPO}:latest"
+                 }
+            }
         }
         
         
