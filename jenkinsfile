@@ -5,6 +5,7 @@ pipeline{
         DOCKER_TAG = "v.${env.BUILD_NUMBER}"
         GIT_REPO = "https://github.com/hothaifa96/jenkins-api-demo"
         WORK_SPACE = "jenkins-api-demo"
+        TEST_CONTIANER_NAME = "app"
     }
     stages{
         stage("checkout"){
@@ -38,6 +39,32 @@ pipeline{
                 sh "docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} ."
                 sh 'docker images'
             }
+        }
+        stage ("Test"){
+            steps{
+                sh "docker run --name ${env.TEST_CONTIANER_NAME} -p 5005:5005 -d ${env.DOCKER_IMAGE}:${env.DOCKER_TAG} "
+            }
+
+            parallel {
+                stage("component test"){
+                    steps{
+                        sh 'curl "http://127.0.0.1:5005/api/convert?from=USD&to=ILS&amount=100"'
+                    }
+                }
+                stage("integration test"){
+                    steps{
+                        
+                    // docker compose up                
+                    sh 'curl "http://127.0.0.1:5005/api/convert?from=USD&to=ILS&amount=100"'
+                    }
+                }
+            }
+        }
+        post{
+            always{
+                sh 'docker rm -f ${env.TEST_CONTIANER_NAME}'
+            }
+           
         }
         
     }
