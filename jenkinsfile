@@ -1,10 +1,16 @@
 pipeline{
     agent any
+    environment {
+        DOCKER_IMAGE = "forex-app"
+        DOCKER_TAG = "v.${env.BUILD_NUMBER}"
+        GIT_REPO = "https://github.com/hothaifa96/jenkins-api-demo"
+        WORK_SPACE = "jenkins-api-demo"
+    }
     stages{
         stage("checkout"){
             steps{
-                sh "rm -fr jenkins-api-demo"
-                sh "git clone https://github.com/hothaifa96/jenkins-api-demo"
+                sh "rm -fr ${env.WORK_SPACE}"
+                sh "git clone ${env.GIT_REPO}"
             }
         }
         // test if the code is running 
@@ -29,8 +35,8 @@ pipeline{
         }
         stage("build docker image"){
             steps{
-                sh "docker build -t forex:v.${env.BUILD_NUMBER} ."
-                sh 'docker ps'
+                sh "docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} ."
+                sh 'docker images'
             }
         }
         
