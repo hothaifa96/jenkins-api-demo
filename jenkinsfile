@@ -17,8 +17,11 @@ pipeline{
                     steps{
                         sh "pip3 install -r requirements.txt"
                         sh "python3 main.py &"
-                        sh "sleep 5"
-                        sh 'curl "http://127.0.0.1:5005/api/convert?from=EUR&to=GBP&amount=250"'  
+                        retry(3){
+                            timeout(time:3 , unit:"SECONDS"){
+                                sh 'curl "http://127.0.0.1:5005/api/convert?from=EUR&to=GBP&amount=250"'  
+                            }
+                        }
                     }
                 
             
