@@ -3,6 +3,7 @@ pipeline{
     stages{
         stage("checkpout"){
             steps{
+                sh "rm -fr jenkins-api-demo"
                 sh "git clone https://github.com/hothaifa96/jenkins-api-demo"
             }
         }
