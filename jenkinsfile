@@ -10,7 +10,7 @@ pipeline{
         AWS_ACCOUNT_ID = "514080426196"
         AWS_REGOIN = "us-east-1"
         ECR_REPO = "forex-app"
-        ECR_URL = "${env.AWS_ACCOUNT_ID}.dkr.ecr.${env.AWS_REGION}.amazonaws.com"
+        ECR_URL = "${env.AWS_ACCOUNT_ID}.dkr.ecr.${env.AWS_REGOIN}.amazonaws.com"
 
         AWS_CRED_ID = "ecr-cred"
 
