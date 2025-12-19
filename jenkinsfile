@@ -43,6 +43,7 @@ pipeline{
         stage ("prepare test env"){
             steps{
                 sh "docker run --name ${env.TEST_CONTIANER_NAME} -p 5005:5005 -d ${env.DOCKER_IMAGE}:${env.DOCKER_TAG} "
+                sh "sleep 3" 
             }
         }
         stage ("Test"){   
