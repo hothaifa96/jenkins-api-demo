@@ -40,11 +40,12 @@ pipeline{
                 sh 'docker images'
             }
         }
-        stage ("Test"){
+        stage ("prepare test env"){
             steps{
                 sh "docker run --name ${env.TEST_CONTIANER_NAME} -p 5005:5005 -d ${env.DOCKER_IMAGE}:${env.DOCKER_TAG} "
             }
-
+        }
+        stage ("Test"){   
             parallel {
                 stage("component test"){
                     steps{
@@ -52,10 +53,9 @@ pipeline{
                     }
                 }
                 stage("integration test"){
-                    steps{
-                        
-                    // docker compose up                
-                    sh 'curl "http://127.0.0.1:5005/api/convert?from=USD&to=ILS&amount=100"'
+                    steps{   
+                        // docker compose up                
+                        sh 'curl "http://127.0.0.1:5005/api/convert?from=USD&to=ILS&amount=100"'
                     }
                 }
             }
