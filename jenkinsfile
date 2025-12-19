@@ -1,24 +1,29 @@
 pipeline{
     agent any
     stages{
-        stage("checkpout"){
+        stage("checkout"){
             steps{
                 sh "rm -fr jenkins-api-demo"
                 sh "git clone https://github.com/hothaifa96/jenkins-api-demo"
             }
         }
         // test if the code is running 
-         stage("build the code"){ 
+         stage("unit test"){ 
             agent{
                 docker{
                     image 'python'
                 }
             }
-            steps{
-                sh "pip3 install -r requirements.txt"
-                sh "python3 main.py "
-                sh "date"
+                stage("build test env"){
+                    steps{
+                        sh "pip3 install -r requirements.txt"
+                        sh "python3 main.py &"
+                        sh "sleep 5"
+                        sh 'curl "http://127.0.0.1:5005/api/convert?from=EUR&to=GBP&amount=250"'  
+                    }
+                
             }
+            
         }
         
     }
