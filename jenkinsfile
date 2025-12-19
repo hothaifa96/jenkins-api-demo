@@ -59,13 +59,14 @@ pipeline{
                     }
                 }
             }
-        }
         post{
             always{
                 sh "docker rm -f ${env.TEST_CONTIANER_NAME}"
             }
            
         }
+        }
+        
         
     }
 }
