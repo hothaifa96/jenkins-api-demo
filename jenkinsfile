@@ -29,7 +29,7 @@ pipeline{
         }
         stage("build docker image"){
             steps{
-                sh "docker build -t forex:v.{env.BUILD_NUMBER} ."
+                sh "docker build -t forex:v.${env.BUILD_NUMBER} ."
                 sh 'docker ps'
             }
         }
