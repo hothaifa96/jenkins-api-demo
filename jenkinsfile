@@ -6,13 +6,15 @@ pipeline{
                 sh "git clone https://github.com/hothaifa96/jenkins-api-demo"
             }
         }
-         stage("build the code"){
+        // test if the code is running 
+         stage("build the code"){ 
             agent{
                 docker{
                     image 'python'
                 }
             }
             steps{
+                sh "pip3 install -r requirements.txt"
                 sh "python3 main.py"
             }
         }
