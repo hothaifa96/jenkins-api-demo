@@ -51,8 +51,8 @@ pipeline{
             parallel {
                 stage("component test"){
                     steps{
-                        sh 'curl "http://127.0.0.1:5005/api/convert?from=USD&to=ILS&amount=100"'
                         sh 'docker ps'
+                        sh 'curl "http://127.0.0.1:5005/api/convert?from=USD&to=ILS&amount=100"'
                     }
                 }
                 stage("integration test"){
